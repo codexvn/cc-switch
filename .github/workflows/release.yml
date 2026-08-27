@@ -17,6 +17,9 @@ jobs:
   release:
     runs-on: ${{ matrix.os }}
     environment: release
+    # fork 构建：macOS 腿缺少 Apple 签名/公证 secrets 时必然失败，
+    # 标记为非阻塞，让 Windows/Linux 产物照常发布；其余平台失败仍会阻塞发布。
+    continue-on-error: ${{ contains(matrix.os, 'macos') }}
     strategy:
       fail-fast: false
       matrix:
