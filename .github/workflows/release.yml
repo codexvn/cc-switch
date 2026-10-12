@@ -865,8 +865,9 @@ jobs:
             esac
           done
           # 缺任一平台都不能发：缺的那批用户会静默收不到更新
+          # fork 构建：macOS 腿无 Apple secrets 必然缺席，不参与完整性校验；
+          # 下方 platforms 构造按 url+sig 条件写入，缺 macOS 不影响其余平台。
           missing=""
-          [ -n "$mac_sig" ] || missing="$missing macOS"
           [ -n "$win_x64_sig" ] || missing="$missing windows-x86_64"
           [ -n "$win_arm64_sig" ] || missing="$missing windows-aarch64"
           [ -n "$linux_x64_sig" ] || missing="$missing linux-x86_64"
