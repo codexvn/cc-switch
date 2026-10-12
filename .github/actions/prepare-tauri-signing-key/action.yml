@@ -20,11 +20,24 @@ runs:
         RAW: ${{ inputs.private-key }}
         KEY_PASSWORD: ${{ inputs.password }}
       run: |
-        # 调试：检查 Secret 是否存在
+        # fork 构建：未配置签名 Secret 时现场生成临时 minisign 密钥对，用完即弃。
+        # 签名仅服务更新器校验，而构建内嵌的公钥仍是上游的（tauri.conf.json 未改），
+        # fork 签名的产物不会被任何已安装实例校验，因此无需固定私钥。
         if [ -z "$RAW" ]; then
-          echo "❌ TAURI_SIGNING_PRIVATE_KEY Secret 为空或不存在" >&2
-          echo "请检查 GitHub 仓库 Settings > Secrets and variables > Actions" >&2
-          exit 1
+          KEY_PATH="$RUNNER_TEMP/tauri_signing.key"
+          KEY_PASSWORD="ephemeral"
+          pnpm tauri signer generate --ci -w "$KEY_PATH" --password "$KEY_PASSWORD" --force
+          # generate 写出的私钥文件本身已是单行 base64，直接注入；
+          # 若再做一次 base64 会双重编码，签名时解析失败。
+          KEY="$(cat "$KEY_PATH")"
+          if [ -z "$KEY" ]; then
+            echo "❌ 无法生成临时私钥" >&2
+            exit 1
+          fi
+          echo "TAURI_SIGNING_PRIVATE_KEY=$KEY" >> "$GITHUB_ENV"
+          echo "TAURI_SIGNING_PRIVATE_KEY_PASSWORD=$KEY_PASSWORD" >> "$GITHUB_ENV"
+          echo "✅ Tauri signing key prepared (ephemeral)"
+          exit 0
         fi
 
         # 目标：提供正确的私钥“文件路径”给 Tauri CLI，避免内容解码歧义
