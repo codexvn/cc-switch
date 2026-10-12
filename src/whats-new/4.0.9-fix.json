@@ -1,0 +1,26 @@
+{
+  "version": "4.0.9-fix",
+  "items": [
+    {
+      "type": "new",
+      "zh": "同步上游 v4.0.9：全新界面、聚合模式、会话与配置切换重写",
+      "zh-TW": "同步上游 v4.0.9：全新介面、聚合模式、會話與設定切換重寫",
+      "en": "Synced with upstream v4.0.9: new UI, aggregation mode, rewritten sessions and config switching",
+      "ja": "上游 v4.0.9 と同期：新 UI、集約モード、セッションと設定切替を刷新"
+    },
+    {
+      "type": "fix",
+      "zh": "count_tokens 接口始终透传上游，不再做格式转换",
+      "zh-TW": "count_tokens 介面始終透傳上游，不再做格式轉換",
+      "en": "Anthropic count_tokens is now passed through to the upstream without conversion",
+      "ja": "count_tokens を変換せず常に上流へ転送"
+    },
+    {
+      "type": "fix",
+      "zh": "响应 model 回写为请求的模型名，思考内容不再被剥离",
+      "zh-TW": "回應 model 回寫為請求的模型名，思考內容不再被剝離",
+      "en": "Claude passthrough now reports the requested model so signed thinking survives",
+      "ja": "透過応答の model をリクエスト側の名前に書き戻し"
+    }
+  ]
+}
