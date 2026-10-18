@@ -577,3 +577,59 @@ For development setup, pre-submit checks, and architecture notes, see [CONTRIBUT
 ## License
 
 MIT © Jason Young
+
+---
+
+## Fork 维护手册（codexvn 私有，上游合并时保留本节）
+
+本 fork 在上游基础上长期维护两个代理修复，并通过下述流程跟随上游发版。
+
+### 分支结构
+
+| 分支 | 用途 |
+|------|------|
+| `fixbase` | 集成分支 = 上游 main + 两个修复 + fork 适配补丁（本机日常使用基于它） |
+| `fix/proxy-count-tokens-passthrough` | PR #5581：Anthropic count_tokens 透传（上游仍无此功能） |
+| `fix/proxy-response-model-rewrite` | PR #5580：Claude 透传响应 model 回写为客户端请求模型 |
+| 远端 `main` | 与 `fixbase` 同步推送（保持默认分支带 workflow_dispatch） |
+
+### 上游同步流程
+
+```bash
+git fetch origin                                   # 拉取上游 farion1231/cc-switch
+git log --oneline fixbase..origin/main             # 查看新增提交
+git grep -li count_tokens origin/main -- src-tauri/src/proxy/   # 确认上游仍未实现 count_tokens（应为 0）
+git merge-tree --write-tree --name-only fixbase origin/main     # 冲突预判
+git merge --no-ff origin/main                      # 合并（历史经验：冲突集中在下列三处）
+cargo check --all-targets                          # 必须零错误零警告
+git push fork fixbase fixbase:main
+# PR 分支同步（保持可向上游提 PR 的干净基座）：
+git rebase --onto origin/main <旧基座> fix/proxy-count-tokens-passthrough
+git rebase --onto origin/main <旧基座> fix/proxy-response-model-rewrite
+git push --force-with-lease fork <两分支>
+```
+
+**历史冲突热点与解法**（每次上游重构会换个位置出现）：
+
+1. `forwarder.rs`：count_tokens 的 thinking 跳过 / Claude 改写跳过 / URL 链分支，与上游在同区域插入的新逻辑（Copilot/OpenCode 会话、Alpha Search 等）相邻——保留我方条件 + 追加上游新代码；
+2. `response_processor.rs`：模型回写的 SSE 事件循环与上游的循环重构（observe_data、事件名提取）融合——参照上游结构包住回写调用，且**非重写路径也要同步上游新逻辑**；
+3. `handlers.rs`：`create_logged_passthrough_stream` 每次上游新增调用点都要补第 6 个参数 `None`；`RequestContext::new`/`process_response` 签名变化需适配 count_tokens 处理器。
+
+### 发版流程（推 tag 全自动）
+
+```bash
+# 1. 补 whats-new 摘要（长度硬限制：zh/zh-TW ≤ 40 字符、en ≤ 100、ja ≤ 50，CI 会校验）
+#    文件：src/whats-new/<版本>.json，写完本地先跑：
+pnpm vitest run tests/config/whatsNewEntries.test.ts
+# 2. 推 tag（自动触发完整构建与 GitHub Release 发布）
+git tag v<x.y.z>-fix && git push fork v<x.y.z>-fix
+```
+
+已内置的 fork 适配（无需密钥）：签名密钥在 `.github/actions/prepare-tauri-signing-key` 内置临时生成逻辑；
+macOS 两条 job 已标 `continue-on-error`（缺 Apple secrets 不阻塞发布）；latest.json 校验已豁免 macOS。
+
+### 已知坑
+
+- 本地 `origin/main` 引用若被中断的 fetch 写坏（报 `did not send all necessary objects` 且引用文件内容为空白），删除 `.git/refs/remotes/origin/main` 松散文件即可恢复（packed-refs 里有有效值）；
+- `cargo test` 在 gnu 工具链下需临时改 `build.rs` 用 windres 嵌 manifest（MSVC 风格参数 mingw 不认），详见历史会话；
+- CC Switch 每次保存 Codex 供应商会重新生成 `~/.codex/cc-switch-model-catalog.json`，GPT 官方覆盖与 GLM 官方值注入用 `D:\Tools\merge-codex-model-catalog.ps1` 重跑恢复。
