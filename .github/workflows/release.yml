@@ -809,7 +809,10 @@ jobs:
   publish-release:
     name: Publish GitHub Release
     runs-on: ubuntu-22.04
-    needs: [release, macos-release]
+    # fork 构建：macOS 链缺 Apple 凭据时可能挂起直至超时被取消，而
+    # continue-on-error 只保护「失败」不保护「取消」，取消会连带跳过发布。
+    # 因此发布只依赖 Windows/Linux 的 release job，macOS 链自行成败。
+    needs: [release]
     # 只有推 tag 才发布。手动触发时也能选 tag 作为运行版本，单看 ref_type 会把干跑当成正式发布，
     # 覆盖已发布 release 的正文和安装包
     if: github.event_name == 'push' && github.ref_type == 'tag'
