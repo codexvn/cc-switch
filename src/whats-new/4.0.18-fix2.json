@@ -1,0 +1,12 @@
+{
+  "version": "4.0.18-fix2",
+  "items": [
+    {
+      "type": "new",
+      "zh": "同步上游 Kimi Code 支持；注释中文化",
+      "zh-TW": "同步上游 Kimi Code 支援；註釋中文化",
+      "en": "Synced upstream Kimi Code support; doc comments localized",
+      "ja": "上游 Kimi Code 対応と同期、コメント中国語化"
+    }
+  ]
+}
