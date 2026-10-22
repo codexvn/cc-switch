@@ -1,0 +1,12 @@
+{
+  "version": "4.0.18-fix",
+  "items": [
+    {
+      "type": "new",
+      "zh": "同步上游 v4.0.18：终端、会话分组与预设维护更新",
+      "zh-TW": "同步上游 v4.0.18：終端、會話分組與預設維護更新",
+      "en": "Synced with upstream v4.0.18: terminal, session grouping and preset maintenance fixes",
+      "ja": "上游 v4.0.18 と同期：ターミナル・セッション分组とプリセット更新"
+    }
+  ]
+}
