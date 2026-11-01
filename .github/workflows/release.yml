@@ -379,7 +379,7 @@ jobs:
   macos-binary:
     name: Build macOS binary (${{ matrix.target }})
     needs: whats-new-check
-    runs-on: macos-14
+    runs-on: macos-15
     environment: release
     # fork 构建：macOS 腿缺少 Apple 签名/公证 secrets 时必然失败，
     # 标记为非阻塞，让 Windows/Linux 产物照常发布；其余平台失败仍会阻塞发布。
@@ -454,7 +454,7 @@ jobs:
   # 已经过了 release 的批准，这里再挂会在半路要求第二次批准。secret 都是仓库级的。
   macos-release:
     name: Bundle macOS release
-    runs-on: macos-14
+    runs-on: macos-15
     needs: macos-binary
     # fork 构建：同 macos-binary，缺 Apple secrets 时非阻塞。
     continue-on-error: true
