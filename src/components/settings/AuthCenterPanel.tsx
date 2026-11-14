@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { CopilotAuthSection } from "@/components/providers/forms/CopilotAuthSection";
 import { CodexOAuthSection } from "@/components/providers/forms/CodexOAuthSection";
@@ -7,7 +7,10 @@ import { AgyOAuthSection } from "@/components/providers/forms/AgyOAuthSection";
 import { ClaudeOfficialSection } from "@/components/providers/forms/ClaudeOfficialSection";
 import { KimiAccountLogin } from "@/components/providers/KimiAccountLogin";
 import { DshAccountLogin } from "@/components/providers/DshAccount";
+import { WorkBuddyAccountSection } from "@/components/settings/auth/WorkBuddyAccountSection";
 import { isMac } from "@/lib/platform";
+import { Switch } from "@/components/ui/switch";
+import { useAuthOpenBrowser, writeAuthOpenBrowser } from "@/lib/authLoginLink";
 import type { AuthCenterTarget } from "@/lib/api";
 
 interface AuthCenterPanelProps {
@@ -17,6 +20,40 @@ interface AuthCenterPanelProps {
    * 侧栏「授权中心」页的页头已经有了，就不再显示。
    */
   showIntro?: boolean;
+}
+
+/**
+ * 「登录时自动打开浏览器」：所有服务的登录共用。关掉后只复制登录链接，用户自己选浏览器打开
+ * （用独立浏览器环境管多个账号时，不让登录混进系统默认浏览器）。
+ */
+function OpenBrowserToggle() {
+  const { t } = useTranslation();
+  const openBrowser = useAuthOpenBrowser();
+  const titleId = useId();
+  const descriptionId = useId();
+  return (
+    <div className="flex shrink-0 items-center gap-4 rounded-panel border border-border bg-surface py-3 pe-4 ps-4">
+      <div className="min-w-0 flex-1 space-y-0.5">
+        <p id={titleId} className="m-0 text-body font-medium text-fg-1">
+          {t("authCenter.openBrowser.title", {
+            defaultValue: "登录时自动打开浏览器",
+          })}
+        </p>
+        <p id={descriptionId} className="m-0 text-caption text-fg-2">
+          {t("authCenter.openBrowser.description", {
+            defaultValue:
+              "关掉后只复制登录链接，由你自己选浏览器打开，适合用独立的浏览器环境管理多个账号。",
+          })}
+        </p>
+      </div>
+      <Switch
+        checked={openBrowser}
+        onCheckedChange={writeAuthOpenBrowser}
+        aria-labelledby={titleId}
+        aria-describedby={descriptionId}
+      />
+    </div>
+  );
 }
 
 /** 定位到某一组时，卡片上沿离正文顶部留的距离 */
@@ -36,8 +73,9 @@ function findScrollContainer(element: HTMLElement): HTMLElement | null {
 }
 
 /**
- * 授权中心：Claude 官方账号、GitHub Copilot、ChatGPT、xAI、Kimi Code、DeepSeek Harness，一组一张卡片；
+ * 授权中心：Claude 官方账号、GitHub Copilot、ChatGPT、xAI、Kimi Code、DeepSeek Harness、WorkBuddy，一组一张卡片；
  * macOS 上另有 Antigravity 一组（切 agy 的官方登录，目前只实现了 macOS 钥匙串）。
+ * WorkBuddy 收录桌面端登录的快照再切换（macOS 已确认路径，Windows / Linux 按推断路径）。
  * 侧栏的「授权中心」页和供应商表单里「管理账号」打开的全屏页共用。
  */
 export function AuthCenterPanel({
@@ -52,6 +90,7 @@ export function AuthCenterPanel({
   const xaiOauthSectionRef = useRef<HTMLDivElement | null>(null);
   const agyOauthSectionRef = useRef<HTMLDivElement | null>(null);
   const kimiOauthSectionRef = useRef<HTMLDivElement | null>(null);
+  const workbuddySectionRef = useRef<HTMLDivElement | null>(null);
   const dshAccountSectionRef = useRef<HTMLDivElement | null>(null);
   const showAgy = isMac();
 
@@ -73,7 +112,9 @@ export function AuthCenterPanel({
                 ? codexOauthSectionRef
                 : authScrollTarget === "agy_oauth"
                   ? agyOauthSectionRef
-                  : xaiOauthSectionRef;
+                  : authScrollTarget === "workbuddy_account"
+                    ? workbuddySectionRef
+                    : xaiOauthSectionRef;
 
     const target = sectionRef.current;
     const container = findScrollContainer(root);
@@ -153,6 +194,7 @@ export function AuthCenterPanel({
           {t("settings.authCenter.description")}
         </p>
       )}
+      <OpenBrowserToggle />
       <div ref={claudeOfficialSectionRef}>
         <ClaudeOfficialSection helpSide="bottom" />
       </div>
@@ -169,13 +211,16 @@ export function AuthCenterPanel({
         <KimiAccountLogin helpSide="bottom" />
       </div>
       <div ref={dshAccountSectionRef}>
-        <DshAccountLogin helpSide={showAgy ? "bottom" : "top"} />
+        <DshAccountLogin helpSide="bottom" />
       </div>
       {showAgy && (
         <div ref={agyOauthSectionRef}>
-          <AgyOAuthSection helpSide="top" />
+          <AgyOAuthSection helpSide="bottom" />
         </div>
       )}
+      <div ref={workbuddySectionRef}>
+        <WorkBuddyAccountSection helpSide="top" />
+      </div>
     </div>
   );
 }

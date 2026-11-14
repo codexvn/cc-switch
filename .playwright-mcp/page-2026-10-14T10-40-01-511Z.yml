@@ -1,0 +1,212 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "跳到主内容" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - generic [ref=e4]:
+      - banner [ref=e5]:
+        - link [ref=e6] [cursor=pointer]:
+          - /url: ../index.html
+          - strong [ref=e14]: 知识工程平台
+        - navigation "平台主导航" [ref=e15]:
+          - link "工作台" [ref=e16] [cursor=pointer]:
+            - /url: ../index.html
+          - link "资源纳管" [ref=e20] [cursor=pointer]:
+            - /url: resource-overview.html
+          - link "知识生产" [ref=e21] [cursor=pointer]:
+            - /url: processing-overview.html
+          - link "知识管理" [ref=e22] [cursor=pointer]:
+            - /url: management-overview.html
+          - link "知识服务" [ref=e23] [cursor=pointer]:
+            - /url: agent-access.html
+        - generic [ref=e24]:
+          - link "全局搜索" [ref=e25] [cursor=pointer]:
+            - /url: knowledge-search.html
+          - link "前台页面" [ref=e29] [cursor=pointer]:
+            - /url: frontend-home.html
+          - button "任务通知" [ref=e31] [cursor=pointer]
+          - link "进入系统配置" [ref=e34] [cursor=pointer]:
+            - /url: system-user-org.html
+            - text: 知
+      - generic [ref=e35]:
+        - complementary "资源纳管菜单" [ref=e36]:
+          - navigation [ref=e37]:
+            - link "资源概览" [ref=e38] [cursor=pointer]:
+              - /url: resource-overview.html
+            - link "文件中心" [ref=e43] [cursor=pointer]:
+              - /url: documents.html
+            - button "资源目录管理" [ref=e48] [cursor=pointer]
+            - link "数据表" [ref=e54] [cursor=pointer]:
+              - /url: data-tables.html
+            - link "图数据" [ref=e58] [cursor=pointer]:
+              - /url: graph-data.html
+            - link "标签管理" [ref=e65] [cursor=pointer]:
+              - /url: resource-tags.html
+            - link "任务中心" [ref=e70] [cursor=pointer]:
+              - /url: resource-tasks.html
+          - generic [ref=e75] [cursor=pointer]:
+            - checkbox "深色模式" [ref=e77]
+            - generic [ref=e79]: 深色模式
+        - main [ref=e80]:
+          - generic [ref=e81]:
+            - generic [ref=e82]:
+              - generic [ref=e83]:
+                - heading "任务中心" [level=1] [ref=e84]
+                - paragraph [ref=e85]: 集中查看知识源同步（含本地上传）、元数据补充与自动入目的执行进度和异常。
+              - link "返回文件中心" [ref=e87] [cursor=pointer]:
+                - /url: documents.html
+            - group [ref=e88]:
+              - generic "业务规则与研发注意事项 V2 §11 任务中心 点击收起" [ref=e89] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e90]: i
+                - generic [ref=e91]:
+                  - strong [ref=e92]: 业务规则与研发注意事项
+                  - generic [ref=e93]: V2 §11 任务中心
+                - generic [ref=e94]: 点击收起
+              - generic [ref=e95]:
+                - paragraph [ref=e96]:
+                  - strong [ref=e97]: 业务边界
+                  - generic [ref=e98]: 任务中心是资源异步操作的长期记录和处理入口；消息中心只展示摘要和跳转。
+                - generic [ref=e99]:
+                  - heading "核心业务逻辑" [level=3] [ref=e100]
+                  - list [ref=e101]:
+                    - listitem [ref=e102]: 对外任务类型只有知识源同步、元数据补充、自动入目三类；本地上传作为内置知识源，统一产生知识源同步任务。
+                    - listitem [ref=e103]: 任务执行完成与业务确认完成是两个维度；有待确认项时不能只显示“已完成”。
+                    - listitem [ref=e104]: 部分失败和执行失败支持重试，范围强制限定为本轮失败文件；禁止重跑成功文件，保留历史执行轮次，取消不回滚已经成功的资源。
+                    - listitem [ref=e105]: "- 执行失败：整体任务重试 ,- 部分失败：仅重试任务内失败的文件， 原则是： 重试任务是重试失败的文件"
+                    - listitem [ref=e106]: 任务名称的命名规则：知识源名称-任务类型-具体到秒的时间点
+                    - listitem [ref=e107]: 任务状态是“执行中”：不允许查看任务详情
+                - generic [ref=e108]:
+                  - heading "研发注意事项" [level=3] [ref=e109]
+                  - list [ref=e110]:
+                    - listitem [ref=e111]: 任务进度来自真实任务项，不使用前端动画或定时器作为执行事实。
+                    - listitem [ref=e112]: 历史自动打标归入元数据补充时，必须保留原始类型和结果。
+            - region "资源任务指标" [ref=e113]:
+              - article [ref=e114]:
+                - generic [ref=e115]: 今日任务
+                - generic [ref=e117]: "128"
+                - generic [ref=e118]: 较昨日 +16
+              - article [ref=e120]:
+                - generic [ref=e121]:
+                  - generic [ref=e122]: 执行中
+                  - generic [ref=e123]: 运行中
+                - generic [ref=e124]: "6"
+                - generic [ref=e125]: 同步 5 · 入目 1
+              - article [ref=e127]:
+                - generic [ref=e128]: 等待处理
+                - generic [ref=e130]: "14"
+                - generic [ref=e131]: 最长等待 8 分钟
+              - article [ref=e133]:
+                - generic [ref=e134]: 异常任务
+                - generic [ref=e136]: "4"
+                - generic [ref=e137]: 需要人工处理
+            - generic [ref=e139]:
+              - generic [ref=e140]:
+                - generic [ref=e141]:
+                  - generic [ref=e142]: 搜索资源任务
+                  - searchbox "搜索资源任务" [ref=e144]
+                - combobox "任务状态" [ref=e146]:
+                  - option "全部状态" [selected]
+                  - option "排队中"
+                  - option "执行中"
+                  - option "已完成"
+                  - option "部分失败"
+                  - option "执行失败"
+                  - option "异常"
+                - tablist "任务类型筛选" [ref=e147]:
+                  - button "全部" [ref=e148] [cursor=pointer]
+                  - button "知识源同步" [ref=e149] [cursor=pointer]
+                  - button "元数据补充" [ref=e150] [cursor=pointer]
+                  - button "自动入目" [ref=e151] [cursor=pointer]
+              - table [ref=e153]:
+                - rowgroup [ref=e154]:
+                  - row [ref=e155]:
+                    - columnheader "任务名称" [ref=e156]
+                    - columnheader "任务类型" [ref=e157]
+                    - columnheader "资源来源" [ref=e158]
+                    - columnheader "发起人" [ref=e159]
+                    - columnheader "开始时间" [ref=e160]
+                    - columnheader "进度 / 结果" [ref=e161]
+                    - columnheader "状态" [ref=e162]
+                    - columnheader "确认进度" [ref=e163]
+                    - columnheader "操作" [ref=e164]
+                - rowgroup [ref=e165]:
+                  - row [ref=e166]:
+                    - cell [ref=e167]:
+                      - link "本地文件批量接入" [ref=e168] [cursor=pointer]:
+                        - /url: resource-task-detail.html?task=TASK-R-20260921-0130
+                    - cell "知识源同步" [ref=e169]
+                    - cell "本地上传" [ref=e170]
+                    - cell "当前用户" [ref=e171]
+                    - cell "11:20" [ref=e172]
+                    - cell "成功 2 / 失败 1" [ref=e173]
+                    - cell "部分失败" [ref=e174]
+                    - cell "0/0" [ref=e176]
+                    - cell [ref=e177]:
+                      - link "查看" [ref=e178] [cursor=pointer]:
+                        - /url: resource-task-detail.html?task=TASK-R-20260921-0130
+                      - button "重试失败文件" [ref=e179] [cursor=pointer]
+                  - row [ref=e180]:
+                    - cell [ref=e181]:
+                      - link "制度文件元数据补充" [ref=e182] [cursor=pointer]:
+                        - /url: resource-task-detail.html?task=TASK-R-20260911-0129
+                    - cell "元数据补充" [ref=e183]
+                    - cell "制度文档空间" [ref=e184]
+                    - cell "当前用户" [ref=e185]
+                    - cell "11:06" [ref=e186]
+                    - cell "2 个文件 · 已确认 0 / 2" [ref=e187]
+                    - cell "已完成" [ref=e188]
+                    - cell "0/2" [ref=e190]
+                    - cell [ref=e191]:
+                      - link "查看" [ref=e192] [cursor=pointer]:
+                        - /url: resource-task-detail.html?task=TASK-R-20260911-0129
+                  - row [ref=e193]:
+                    - cell "制度文件批量接入" [ref=e194]
+                    - cell "知识源同步" [ref=e195]
+                    - cell "本地上传" [ref=e196]
+                    - cell "王翠" [ref=e197]
+                    - cell "10:42" [ref=e198]
+                    - cell "68 / 100" [ref=e199]
+                    - cell "执行中" [ref=e200]
+                    - cell "0/0" [ref=e202]
+                    - cell "执行中，暂不可查看" [ref=e203]
+                  - row [ref=e204]:
+                    - cell "飞书知识库增量同步" [ref=e205]
+                    - cell "知识源同步" [ref=e206]
+                    - cell "飞书知识库" [ref=e207]
+                    - cell "系统调度" [ref=e208]
+                    - cell "10:30" [ref=e209]
+                    - cell "1,842 / 2,316" [ref=e210]
+                    - cell "执行中" [ref=e211]
+                    - cell "0/0" [ref=e213]
+                    - cell "执行中，暂不可查看" [ref=e214]
+                  - row [ref=e215]:
+                    - cell [ref=e216]:
+                      - link "信贷制度资源自动入目" [ref=e217] [cursor=pointer]:
+                        - /url: resource-task-detail.html?task=TASK-R-20260905-0126
+                    - cell "自动入目" [ref=e218]
+                    - cell "企业空间" [ref=e219]
+                    - cell "李程" [ref=e220]
+                    - cell "09:56" [ref=e221]
+                    - cell "2 / 2" [ref=e222]
+                    - cell "已完成" [ref=e223]
+                    - cell "0/2" [ref=e225]
+                    - cell [ref=e226]:
+                      - link "查看" [ref=e227] [cursor=pointer]:
+                        - /url: resource-task-detail.html?task=TASK-R-20260905-0126
+                  - row [ref=e228]:
+                    - cell [ref=e229]:
+                      - link "合同管理系统增量同步" [ref=e230] [cursor=pointer]:
+                        - /url: resource-task-detail.html?task=TASK-R-20260905-0125
+                    - cell "知识源同步" [ref=e231]
+                    - cell "合同管理系统" [ref=e232]
+                    - cell "系统调度" [ref=e233]
+                    - cell "08:00" [ref=e234]
+                    - cell "成功 0 / 失败 2" [ref=e235]
+                    - cell "执行失败" [ref=e236]
+                    - cell "0/0" [ref=e238]
+                    - cell [ref=e239]:
+                      - link "查看" [ref=e240] [cursor=pointer]:
+                        - /url: resource-task-detail.html?task=TASK-R-20260905-0125
+                      - button "重试" [ref=e241] [cursor=pointer]
+    - status
+  - button "打开知识工程 AI 助手" [ref=e242] [cursor=pointer]:
+    - generic [ref=e245]: AI 助手
