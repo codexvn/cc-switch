@@ -1,0 +1,12 @@
+{
+  "version": "4.0.32-fix",
+  "items": [
+    {
+      "type": "new",
+      "zh": "同步上游 v4.0.32：IP 诊断、隐私过滤与多项用量修复",
+      "zh-TW": "同步上游 v4.0.32：IP 診斷、隱私過濾與多項用量修復",
+      "en": "Synced with upstream v4.0.32: IP diagnostics, privacy filtering and usage fixes",
+      "ja": "上游 v4.0.32 と同期：IP 診断、プライバシー フィルタ等"
+    }
+  ]
+}
